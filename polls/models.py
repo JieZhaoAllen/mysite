@@ -1,5 +1,5 @@
 from django.db import models
-from datetime import datetime
+from datetime import datetime, timezone
 import time
 # Create your models here.
 
@@ -12,7 +12,8 @@ class Poll(models.Model):
         return self.question
 
     def was_published_recently(self):
-        return self.pub_date >= time.timezone.now() - datetime.timedelta(days=1)
+        now = timezone.now()
+        return now - datetime.timedelta(days=1) <= self.pub_date <= now
 
     was_published_recently.admin_order_field = 'pub_date'
     was_published_recently.boolean = True
